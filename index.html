@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Presentación</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: black;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+/* Contenedor escalable */
+#container {
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    transform-origin: center;
+}
+
+/* Slides */
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 1;
+}
+
+.slide img,
+.slide video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Botón siguiente */
+.next-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    font-size: 18px;
+    color: white;
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 12px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.next-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.05);
+}
+
+/* Botón TE AMO */
+.love-btn {
+    position: absolute;
+    padding: 32px 80px;
+    font-size: 52px;
+    color: white;
+    background: linear-gradient(45deg, #ff0033, #ff5f8f);
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    z-index: 10;
+    animation: heartbeat 2s infinite;
+    box-shadow: 0 0 30px rgba(255, 0, 80, 0.6);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.love-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 60px rgba(255, 0, 80, 1);
+}
+
+/* Latido */
+@keyframes heartbeat {
+    0%   { transform: scale(1); }
+    25%  { transform: scale(1.05); }
+    50%  { transform: scale(1); }
+    75%  { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+/* Audio oculto */
+audio {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="container">
+
+<audio id="music" src="mes/cancion.mp3" loop></audio>
+
+<!-- 1 -->
+<div class="slide active">
+    <button class="next-btn" onclick="nextSlide()">Siguiente</button>
+    <img src="mes/portada.png">
+</div>
+
+<!-- 2 -->
+<div class="slide">
+    <button class="next-btn" onclick="nextSlide()">Siguiente</button>
+    <img src="mes/gatoconflores.png">
+</div>
+
+<!-- 3 -->
+<div class="slide">
+    <button class="next-btn" onclick="nextSlide()">Siguiente</button>
+    <img src="mes/carta.png">
+</div>
+
+<!-- 4 VIDEO -->
+<div class="slide">
+    <button class="next-btn" onclick="nextSlide()">Siguiente</button>
+    <video src="mes/collag.mp4" autoplay loop muted></video>
+</div>
+
+<!-- 5 -->
+<div class="slide">
+    <button class="next-btn" onclick="nextSlide()">Siguiente</button>
+    <img src="mes/cupon.png">
+</div>
+
+<!-- 6 FINAL -->
+<div class="slide">
+    <img src="mes/estrellas.png">
+    <button class="love-btn" onclick="goToStart()">TE AMO</button>
+</div>
+
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const music = document.getElementById('music');
+let current = 0;
+let musicStarted = false;
+
+/* Escalado automático */
+function scaleContainer() {
+    const scale = Math.min(
+        window.innerWidth / 1920,
+        window.innerHeight / 1080
+    );
+    document.getElementById('container').style.transform = `scale(${scale})`;
+}
+window.addEventListener('resize', scaleContainer);
+scaleContainer();
+
+/* Música al primer clic */
+document.addEventListener('click', () => {
+    if (!musicStarted) {
+        music.play();
+        musicStarted = true;
+    }
+}, { once: true });
+
+function nextSlide() {
+    slides[current].classList.remove('active');
+    current++;
+    if (current >= slides.length) current = slides.length - 1;
+    slides[current].classList.add('active');
+}
+
+function goToStart() {
+    slides[current].classList.remove('active');
+    current = 0;
+    slides[current].classList.add('active');
+}
+</script>
+
+</body>
+</html>
